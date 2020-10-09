@@ -1,0 +1,23 @@
+<source>
+  @type tail
+  <parse>
+    @type none
+  </parse>
+  path /tmp/sample_tail.log
+  pos_file /tmp/sample_tail.pos
+  tag trace.events
+</source>
+
+#Add hostname and service_name to all events with "example.service" tag
+<filter trace.events>
+  @type record_transformer
+  <record>
+    service.name ${tag}
+    host "#{Socket.gethostname}"
+  </record>
+</filter>
+
+<match **>
+  @type newrelic_trace
+  api_key <NEWRELIC-API_KEY>
+</match>

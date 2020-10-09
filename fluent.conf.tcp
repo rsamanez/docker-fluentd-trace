@@ -1,0 +1,24 @@
+<source>
+  @type tcp
+  <parse>
+    @type none
+  </parse>
+  port 5170
+  bind 0.0.0.0
+  delimiter "\n"
+  tag trace.events
+</source>
+
+#Add hostname and service_name to all events with "example.service" tag
+<filter trace.events>
+  @type record_transformer
+  <record>
+    service.name ${tag}
+    host "#{Socket.gethostname}"
+  </record>
+</filter>
+
+<match **>
+  @type newrelic_trace
+  api_key <NEWRELIC-API_KEY>
+</match>
